@@ -1,0 +1,209 @@
+---
++++
+@@ x,17 x,14 @@
+
+ async def sequence_00():
+     await trio.lowlevel.checkpoint()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def sequence_01():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     await foo()
+
+
+ async def sequence_10():
+     await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def sequence_11():
+@@ x,44 x,33 @@
+ # all permutations of 3
+ async def sequencing_000():
+     await trio.lowlevel.checkpoint()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def sequencing_001():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     await foo()
+
+
+ async def sequencing_010():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-    await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
++    await foo()
+
+
+ async def sequencing_011():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     await foo()
+     await foo()
+
+
+ async def sequencing_100():
+     await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def sequencing_101():
+     await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     await foo()
+
+
+ async def sequencing_110():
+     await foo()
+     await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def sequencing_111():
+@@ x,7 x,6 @@
+         await trio.lowlevel.checkpoint()
+     else:
+         await trio.lowlevel.checkpoint()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_5():
+     if ...:
+@@ x,10 x,8 @@
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+     else:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_0001():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     if ...:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+     else:
+@@ x,20 x,16 @@
+     await foo()
+
+ async def foo_if_0010():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     if ...:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8 # INCORRECT
+     else:
+         await foo()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_0100():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     if ...:
+         await foo()
+     else:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8 # INCORRECT
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_1000():
+     await foo()
+@@ x,7 x,6 @@
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+     else:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_1000_1():
+     await foo()
+@@ x,7 x,6 @@
+         await trio.lowlevel.checkpoint()
+     else:
+         await trio.lowlevel.checkpoint()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_1000_2():
+     await foo()
+@@ x,7 x,6 @@
+         await trio.lowlevel.checkpoint()
+     else:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_1000_3():
+     await foo()
+@@ x,7 x,6 @@
+     else:
+         yield
+         await trio.lowlevel.checkpoint()
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+ async def foo_if_1000_5():
+     await foo()
+@@ x,11 x,9 @@
+     await trio.lowlevel.checkpoint()
+     while ...:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def foo_while_2():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     while ...:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8
+     await foo()
+@@ x,8 x,6 @@
+             await trio.lowlevel.checkpoint()  # TRIO912: 12
+         else:
+             await trio.lowlevel.checkpoint()  # TRIO912: 12
+-
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def foo_while_4():
+@@ x,16 x,12 @@
+         else:
+             await trio.lowlevel.checkpoint()  # TRIO912: 12
+
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-
+
+
+ async def foo_while_5():
+     await trio.lowlevel.checkpoint()  # should be TRIO912
+     while ...:
+         await foo()
+-
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+
+
+ async def foo_while_6():
+@@ x,8 x,6 @@
+         else:
+             await foo()
+
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+-
+
+ async def foo_trio_1():
+     await trio.lowlevel.checkpoint()
+@@ x,7 x,6 @@
+
+
+ async def foo_trio_2():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     try:
+         await trio.lowlevel.checkpoint()  # TRIO912: 8 # INCORRECT
+     except:
+@@ x,7 x,6 @@
+
+
+ async def foo_trio_3():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     try:
+         await foo()
+     except:
+@@ x,7 x,6 @@
+
+
+ async def foo_trio_4():
+-    await trio.lowlevel.checkpoint()  # TRIO912: 4
+     try:
+         await foo()
+     except:
